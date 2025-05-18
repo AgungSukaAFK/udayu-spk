@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://udayu-spk.vercel.app/sitemap.xml
