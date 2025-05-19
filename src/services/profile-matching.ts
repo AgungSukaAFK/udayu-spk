@@ -7,6 +7,8 @@ import {
   deleteDoc,
   query,
   where,
+  Timestamp,
+  serverTimestamp,
 } from "firebase/firestore";
 
 export interface PMResponse<T> {
@@ -25,22 +27,24 @@ export interface ProfileMatchingData {
     cf: number;
     sf: number;
   };
-  sub_kriteria: {
+  "sub-kriteria": {
     nama: string;
     kriteria: string;
     harapan_nilai: number;
-    jenis: "CORE FACTOR" | "SECONDARY FACTOR";
+    jenis: string;
   }[];
   subject: {
     nama: string;
     nilai: {
-      sub_kriteria: string;
+      "sub-kriteria": string;
       nilai: number;
     }[];
   }[];
+  created_at: Timestamp;
+  updated_at: Timestamp;
 }
 
-const COLLECTION_NAME = "profile-matching";
+const COLLECTION_NAME = "pms";
 
 export const PMServices = {
   getAllPM: async (): Promise<PMResponse<ProfileMatchingData[]>> => {
@@ -91,10 +95,18 @@ export const PMServices = {
     }
   },
 
-  createPM: async (data: ProfileMatchingData): Promise<PMResponse<null>> => {
+  createPM: async (dto: ProfileMatchingData): Promise<PMResponse<null>> => {
     try {
-      const docRef = doc(db, COLLECTION_NAME, data.kode);
-      await setDoc(docRef, data);
+      const docRef = doc(db, COLLECTION_NAME, dto.kode);
+
+      const dataToSave = {
+        ...dto,
+        created_at: serverTimestamp(),
+        updated_at: serverTimestamp(),
+      };
+
+      await setDoc(docRef, dataToSave);
+
       return { success: true, message: "Data berhasil dibuat." };
     } catch (error: any) {
       return {
