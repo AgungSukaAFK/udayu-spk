@@ -77,7 +77,7 @@ export default function PMOverview({
                 className="w-fit flex flex-col gap-2 px-4 py-2 shadow-xs border-border border rounded-md"
               >
                 <Button variant={"outline"} onClick={() => setPm(item)}>
-                  {item.kode}
+                  <a href="#pm-detail">{item.kode}</a>
                 </Button>
                 <p className="text-base">
                   Terakhir diubah : {formatFirestoreTimestamp(item.updated_at)}

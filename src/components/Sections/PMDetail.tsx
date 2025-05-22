@@ -42,7 +42,7 @@ export default function PMDetail({ pm, setPm }: PMDetailProps) {
   const rankingData = hitungRanking(pm, nta);
 
   return (
-    <Section title="Detail Perhitungan PM">
+    <Section title="Detail Perhitungan PM" id="pm-detail">
       {pm ? (
         <>
           <h4 className="text-lg font-semibold mb-4">Kode: {pm.kode}</h4>

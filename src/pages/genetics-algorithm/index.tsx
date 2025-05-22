@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet";
 import PMTemplate from "@/components/PMTemplate.tsx";
+import GA from "@/components/Sections/GA";
 // import PMOverview from "@/components/Sections/PMOverview";
 // import PMDetail from "@/components/Sections/PMDetail";
 // import { useState } from "react";
@@ -23,10 +24,7 @@ export default function GeneticsAlgorithm() {
         />
       </Helmet>
       <PMTemplate>
-        <div className="mt-4 text-xl font-bold font-lexend">Coming soon...</div>
-        {/* <PMOverview setPm={setPm} />
-        <PMDetail pm={pm} setPm={setPm} />
-        <PMCreate /> */}
+        <GA />
       </PMTemplate>
     </>
   );
