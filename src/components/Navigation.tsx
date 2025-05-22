@@ -35,6 +35,9 @@ export function Navigation() {
               <Button variant={"link"}>
                 <a href="/weighted-product">Weighted Product</a>
               </Button>
+              <Button variant={"link"}>
+                <a href="/genetics-algorithm">Genetics Algorithm</a>
+              </Button>
             </NavigationMenuContent>
           </NavigationMenuItem>
         </NavigationMenuList>
