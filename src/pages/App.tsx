@@ -37,6 +37,11 @@ export default function App() {
               Mulai Weighted Product
             </Button>
           </Link>
+          <Link to="/genetics-algorithm">
+            <Button variant="outline" className="w-60 text-lg">
+              Mulai GA (TITIK PKN)
+            </Button>
+          </Link>
         </div>
       </main>
     </>
