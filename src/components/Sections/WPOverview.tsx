@@ -2,56 +2,57 @@ import { useEffect, useMemo, useState, type SetStateAction } from "react";
 import Section from "../Section";
 import { Input } from "../ui/input";
 import {
-  PMServices,
-  type ProfileMatchingData,
-} from "@/services/profile-matching";
+  WPServices,
+  type WeightedProductData,
+} from "@/services/weighted-product"; // Adjusted import for WP services
 import { toast } from "sonner";
 import MyPagination from "../MyPagination";
 import { Button } from "../ui/button";
-import { formatFirestoreTimestamp } from "@/utils/date";
+import { formatFirestoreTimestamp } from "@/utils/date"; // Assuming this utility is available
 import { Skeleton } from "../ui/skeleton";
+import type { Timestamp } from "firebase/firestore";
 
-export default function PMOverview({
-  setPm,
+export default function WPOverview({
+  setWp,
 }: {
-  setPm: React.Dispatch<SetStateAction<ProfileMatchingData | undefined>>;
+  setWp: React.Dispatch<SetStateAction<WeightedProductData | undefined>>;
 }) {
-  const [pm, setPM] = useState<ProfileMatchingData[]>();
+  const [wp, setWP] = useState<WeightedProductData[]>();
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const itemsPerPage = 10;
 
-  const filteredPM = useMemo(() => {
-    if (!pm) return [];
-    return pm.filter((item) =>
+  const filteredWP = useMemo(() => {
+    if (!wp) return [];
+    return wp.filter((item) =>
       item.kode.toLowerCase().includes(search.toLowerCase())
     );
-  }, [pm, search]);
+  }, [wp, search]);
 
-  const totalPages = Math.ceil(filteredPM.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredWP.length / itemsPerPage);
 
-  const paginatedPM = useMemo(() => {
+  const paginatedWP = useMemo(() => {
     const start = (page - 1) * itemsPerPage;
-    return filteredPM.slice(start, start + itemsPerPage);
-  }, [filteredPM, page]);
+    return filteredWP.slice(start, start + itemsPerPage);
+  }, [filteredWP, page]);
 
   useEffect(() => {
-    async function fetchPM() {
-      const pm = await PMServices.getAllPM();
-      if (pm.success) {
-        setPM(pm.data);
+    async function fetchWP() {
+      const wpResponse = await WPServices.getAllWP(); // Changed to WPServices
+      if (wpResponse.success) {
+        setWP(wpResponse.data);
       } else {
-        toast.error(pm.message);
+        toast.error(wpResponse.message);
       }
     }
 
-    if (!pm) {
-      fetchPM();
+    if (!wp) {
+      fetchWP();
     }
-  }, [pm]);
+  }, [wp]);
 
   return (
-    <Section title="Overview">
+    <Section title="Overview Perhitungan Weighted Product">
       {/* Search bar */}
       <div className="flex flex-col gap-4 mb-4">
         <Input
@@ -68,19 +69,20 @@ export default function PMOverview({
         </Button>
       </div>
 
-      {/* Daftar PM */}
+      {/* Daftar WP */}
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mb-4 gap-2">
-        {paginatedPM.length > 0
-          ? paginatedPM.map((item, key) => (
+        {paginatedWP.length > 0
+          ? paginatedWP.map((item, key) => (
               <div
                 key={key}
                 className="w-fit flex flex-col gap-2 px-4 py-2 shadow-xs border-border border rounded-md"
               >
-                <Button variant={"outline"} onClick={() => setPm(item)} asChild>
-                  <a href="#pm-detail">{item.kode}</a>
+                <Button variant={"outline"} onClick={() => setWp(item)} asChild>
+                  <a href="#wp-detail">{item.kode}</a>
                 </Button>
                 <p className="text-base">
-                  Terakhir diubah : {formatFirestoreTimestamp(item.updated_at)}
+                  Terakhir diubah :{" "}
+                  {formatFirestoreTimestamp(item.updated_at as Timestamp)}
                 </p>
               </div>
             ))

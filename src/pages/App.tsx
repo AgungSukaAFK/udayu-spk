@@ -20,7 +20,8 @@ export default function App() {
 
       <main className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-sky-50 to-white px-4 text-center">
         <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">
-          Selamat Datang di <span className="text-sky-600">udayu-spk</span>
+          Selamat Datang di{" "}
+          <span className="text-sky-600 font-lexend">UDAYU</span> SPK
         </h1>
         <p className="text-lg md:text-xl text-gray-600 max-w-xl mb-8">
           Aplikasi Sistem Pendukung Keputusan (SPK) berbasis metode{" "}
@@ -35,11 +36,6 @@ export default function App() {
           <Link to="/weighted-product">
             <Button variant="outline" className="w-60 text-lg">
               Mulai Weighted Product
-            </Button>
-          </Link>
-          <Link to="/genetics-algorithm">
-            <Button variant="outline" className="w-60 text-lg">
-              Mulai GA (TITIK PKN)
             </Button>
           </Link>
         </div>

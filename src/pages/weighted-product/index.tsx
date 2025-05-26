@@ -1,13 +1,13 @@
 import { Helmet } from "react-helmet";
 import PMTemplate from "@/components/PMTemplate.tsx";
-// import PMOverview from "@/components/Sections/PMOverview";
-// import PMDetail from "@/components/Sections/PMDetail";
-// import { useState } from "react";
-// import type { ProfileMatchingData } from "@/services/profile-matching";
-// import PMCreate from "@/components/Sections/PMCreate";
+import WPCreate from "@/components/Sections/WPCreate";
+import WPOverview from "@/components/Sections/WPOverview";
+import { useState } from "react";
+import type { WeightedProductData } from "@/services/weighted-product";
+import WPDetail from "@/components/Sections/WPDetail";
 
 export default function WeightedProduct() {
-  //   const [pm, setPm] = useState<ProfileMatchingData>();
+  const [wp, setWp] = useState<WeightedProductData>();
   return (
     <>
       <Helmet>
@@ -23,10 +23,9 @@ export default function WeightedProduct() {
         />
       </Helmet>
       <PMTemplate>
-        <div className="mt-4 text-xl font-bold font-lexend">Coming soon...</div>
-        {/* <PMOverview setPm={setPm} />
-        <PMDetail pm={pm} setPm={setPm} />
-        <PMCreate /> */}
+        <WPOverview setWp={setWp} />
+        <WPDetail wp={wp} setWp={setWp} />
+        <WPCreate />
       </PMTemplate>
     </>
   );

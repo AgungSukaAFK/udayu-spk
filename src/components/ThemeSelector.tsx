@@ -17,6 +17,8 @@ export default function ThemeSelector() {
     "dark",
     "rose",
     "dark-rose",
+    "blue",
+    "dark-blue",
     "green",
     "dark-green",
   ] as Theme[];

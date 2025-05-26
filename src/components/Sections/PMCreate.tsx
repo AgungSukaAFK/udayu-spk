@@ -4,7 +4,7 @@ import {
   type ProfileMatchingData,
 } from "@/services/profile-matching";
 import { validateProfileMatchingData } from "@/Validations/profile-matching";
-import { Minus, Plus } from "lucide-react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 import React, {
   useEffect,
   useState,
@@ -434,9 +434,9 @@ export default function PMCreate({ className = "" }: { className?: string }) {
 
   return (
     <Section title="Buat Perhitungan PM Baru">
-      <div id="create">
-        <Button variant={"ghost"} onClick={autoInputPM}>
-          Auto Input
+      <div id="create" className="flex flex-col gap-4">
+        <Button variant={"secondary"} onClick={autoInputPM}>
+          Auto Input Berdasarkan Data Jurnal
         </Button>
         <form
           id="form_create"
@@ -506,35 +506,67 @@ export default function PMCreate({ className = "" }: { className?: string }) {
           {/* Kriteria */}
           <div className="grid gap-2">
             <Label htmlFor="kriteria">Kriteria</Label>
-            <div className="grid grid-cols-8 w-full gap-2 justify-between">
-              <p className="col-span-4 py-1 text-muted-foreground">Nama</p>
-              <p className="col-span-2 text-muted-foreground">Bobot (%)</p>
-            </div>
-            <div className="w-full flex flex-col gap-2">
-              {pm?.kriteria?.map((e) => {
-                return (
-                  <div className="grid grid-cols-8 w-full gap-2 justify-between">
-                    <p className="col-span-4 py-1 text-muted-foreground">
-                      {e.nama}
-                    </p>
-                    <p className="col-span-2 text-muted-foreground">
-                      {e.bobot}
-                    </p>
-                    <Button
-                      type="button"
-                      size={"sm"}
-                      className="col-span-2"
-                      onClick={() => removeKriteria(e.nama)}
-                    >
-                      <Minus />
-                    </Button>
-                  </div>
-                );
-              })}
+            <div className="w-full">
+              <table className="min-w-full border border-border">
+                <thead>
+                  <tr className="bg-secondary">
+                    <th className="px-4 py-2 text-left text-muted-foreground border-b border-r border-border">
+                      Nama
+                    </th>
+                    <th className="px-4 py-2 text-left text-muted-foreground border-b border-r border-border">
+                      Bobot (%)
+                    </th>
+                    <th className="px-4 py-2 text-center text-muted-foreground border-b border-border">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pm?.kriteria?.map((e, index) => (
+                    <tr key={index} className="border-b border-border">
+                      <td className="px-4 py-2 text-muted-foreground border-r border-border">
+                        {e.nama}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground border-r border-border">
+                        {e.bobot}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <Button
+                          type="button"
+                          size={"sm"}
+                          onClick={() => removeKriteria(e.nama)}
+                        >
+                          <Trash2 />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                  {/* Row for Total Bobot */}
+                  <tr className="bg-accent/50">
+                    <td className="px-4 py-2 font-semibold text-right border-r border-border">
+                      Total Bobot
+                    </td>
+                    <td className="px-4 py-2 font-semibold border-r border-border">
+                      {pm?.kriteria?.reduce(
+                        (sum, kriteria) => sum + kriteria.bobot,
+                        0
+                      )}
+                      %
+                    </td>
+                    <td></td> {/* Empty cell for the "Aksi" column */}
+                  </tr>
+                </tbody>
+              </table>
             </div>
 
+            <p className="text-sm text-red-600 mt-2">
+              <strong>Penting</strong>: Pastikan total bobot semua kriteria
+              berjumlah
+              <strong>100%</strong> untuk perhitungan yang akurat.
+            </p>
+
             {/* Tambah kriteria */}
-            <div className="grid grid-cols-8 w-full gap-2">
+            <div className="grid grid-cols-8 w-full gap-2 mt-4">
               <Input
                 type="text"
                 placeholder="Nama Kriteria"
@@ -565,46 +597,59 @@ export default function PMCreate({ className = "" }: { className?: string }) {
           {/* Sub Kriteria */}
           <div className="grid gap-2">
             <Label htmlFor="sub-kriteria">Sub-kriteria</Label>
-            <div className="grid grid-cols-12 w-full gap-2 justify-between">
-              <p className="col-span-3 py-1 text-muted-foreground">Kriteria</p>
-              <p className="col-span-3 text-muted-foreground">Nama</p>
-              <p className="col-span-2 text-muted-foreground">Harapan</p>
-              <p className="text-center col-span-3 text-muted-foreground">
-                Jenis
-              </p>
-            </div>
-            <div className="w-full flex flex-col gap-2">
-              {pm?.["sub-kriteria"]?.map((e, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="grid grid-cols-12 w-full gap-2 justify-between"
-                  >
-                    <p className="col-span-3 py-1 text-muted-foreground">
-                      {e.kriteria}
-                    </p>
-                    <p className="col-span-3 text-muted-foreground">{e.nama}</p>
-                    <p className="col-span-2 text-muted-foreground">
-                      {e.harapan_nilai}
-                    </p>
-                    <p className="col-span-3 text-muted-foreground">
-                      {e.jenis}
-                    </p>
-                    <Button
-                      type="button"
-                      size={"sm"}
-                      className="col-span-1"
-                      onClick={() => removeSubKriteria(e.nama)}
-                    >
-                      <Minus />
-                    </Button>
-                  </div>
-                );
-              })}
+            <div className="w-full">
+              <table className="min-w-full border border-border">
+                <thead>
+                  <tr className="bg-secondary">
+                    <th className="px-4 py-2 text-left text-muted-foreground border-b border-r border-border">
+                      Kriteria
+                    </th>
+                    <th className="px-4 py-2 text-left text-muted-foreground border-b border-r border-border">
+                      Nama
+                    </th>
+                    <th className="px-4 py-2 text-left text-muted-foreground border-b border-r border-border">
+                      Harapan
+                    </th>
+                    <th className="px-4 py-2 text-center text-muted-foreground border-b border-border">
+                      Jenis
+                    </th>
+                    <th className="px-4 py-2 text-center text-muted-foreground border-b border-border">
+                      Aksi
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pm?.["sub-kriteria"]?.map((e, index) => (
+                    <tr key={index} className="border-b border-border">
+                      <td className="px-4 py-2 text-muted-foreground border-r border-border">
+                        {e.kriteria}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground border-r border-border">
+                        {e.nama}
+                      </td>
+                      <td className="px-4 py-2 text-muted-foreground border-r border-border">
+                        {e.harapan_nilai}
+                      </td>
+                      <td className="px-4 py-2 text-center text-muted-foreground border-r border-border">
+                        {e.jenis}
+                      </td>
+                      <td className="px-4 py-2 text-center">
+                        <Button
+                          type="button"
+                          size={"sm"}
+                          onClick={() => removeSubKriteria(e.nama)}
+                        >
+                          <Trash2 />
+                        </Button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
 
             {/* Tambah sub kriteria */}
-            <div className="grid grid-cols-12 w-full gap-2">
+            <div className="grid grid-cols-12 w-full gap-2 mt-4">
               {/* Kriteria */}
               <div className="col-span-3">
                 <Select onValueChange={(ek) => setKriteriaSub(ek)}>
@@ -612,13 +657,11 @@ export default function PMCreate({ className = "" }: { className?: string }) {
                     <SelectValue placeholder="Kriteria" />
                   </SelectTrigger>
                   <SelectContent>
-                    {pm?.kriteria?.map((e, i) => {
-                      return (
-                        <SelectItem key={i} value={e.nama}>
-                          {e.nama}
-                        </SelectItem>
-                      );
-                    })}
+                    {pm?.kriteria?.map((e, i) => (
+                      <SelectItem key={i} value={e.nama}>
+                        {e.nama}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
               </div>
