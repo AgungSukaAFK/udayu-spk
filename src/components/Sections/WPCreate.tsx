@@ -63,11 +63,6 @@ export default function WPCreate({ className = "" }: { className?: string }) {
   const [selectedCriteriaForAssessment, setSelectedCriteriaForAssessment] =
     React.useState<string>("");
 
-  const [fishCandidateCode, setFishCandidateCode] = React.useState<string>("");
-  const [fishCandidateAssessments, setFishCandidateAssessments] = useState<
-    { criteriaCode: string; value: string }[]
-  >([]);
-
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   function autoInputWP() {
@@ -614,7 +609,7 @@ export default function WPCreate({ className = "" }: { className?: string }) {
                 </TableHeader>
                 <TableBody>
                   {wp?.criteria?.map((c) =>
-                    c.assessments.map((a, index) => (
+                    c.assessments.map((a) => (
                       <TableRow
                         key={`<span class="math-inline">\{c\.code\}\-</span>{index}`}
                         className="border-b border-border"
